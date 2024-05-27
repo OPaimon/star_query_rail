@@ -1,0 +1,13 @@
+# This file contains values from Cookiecutter
+
+default_context:
+  project_name: "star_query_rail"
+  project_description: "A tool for query some infomation about a game"
+  organization: "star_query_rail"
+  license: "MIT"
+  minimal_python_version: 3.9
+  github_name: "OPaimon"
+  email: "paimoe@bupt.edu.cn"
+  version: "0.1.0"
+  line_length: "88"
+  create_example_template: "cli"
