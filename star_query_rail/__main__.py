@@ -7,7 +7,7 @@ import typer
 from rich.console import Console
 
 from star_query_rail import version
-from star_query_rail.example import hello
+from star_query_rail.example import get_character_info, hello
 
 
 class Color(str, Enum):
@@ -60,6 +60,23 @@ def main(
 
     greeting: str = hello(name)
     console.print(f"[bold {color}]{greeting}[/]")
+
+
+@app.command(name="getCharacterInfo")
+def cli_get_character_info(
+    cookies: str = typer.Option(..., help="Cookies for query."),
+    player_id: int = typer.Option(..., help="Player ID for query."),
+    print_version: bool = typer.Option(
+        None,
+        "-v",
+        "--version",
+        callback=version_callback,
+        is_eager=True,
+        help="Prints the version of the star_query_rail package.",
+    ),
+) -> None:
+    """Get character info."""
+    get_character_info(cookies, player_id)
 
 
 if __name__ == "__main__":
