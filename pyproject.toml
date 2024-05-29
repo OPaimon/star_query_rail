@@ -36,7 +36,7 @@ classifiers = [  #! Update me
 [tool.poetry.dependencies]
 python = "^3.9"
 
-typer = {extras = ["all"], version = "^0.4.0"}
+typer = {extras = ["all"], version = "^0.12.3"}
 rich = "^10.14.0"
 simnet = {git = "https://github.com/PaiGramTeam/SIMNet"}
 arko-wrapper = "^0.2.8"
