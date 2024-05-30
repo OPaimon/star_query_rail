@@ -1,9 +1,7 @@
-from sqlalchemy import create_engine, Column, Integer, JSON, ForeignKey
+import sqlalchemy
+from sqlalchemy import create_engine, Column, Integer, JSON, ForeignKey, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import sqlalchemy
-from sqlalchemy import Column, Integer, String
-
 
 # 创建 SQLAlchemy 引擎
 engine = create_engine('postgresql://postgres:@localhost/starrail', echo=True)
@@ -11,23 +9,23 @@ engine = create_engine('postgresql://postgres:@localhost/starrail', echo=True)
 # 创建基类
 Base = sqlalchemy.orm.declarative_base()
 
-
-class User(Base):
+class user(Base):
     __tablename__ = 'User'
     userid = Column(Integer, primary_key=True)
     name = Column(String)
     cookie = Column(JSON)
 
-class Character(Base):
+class character(Base):
     __tablename__ = 'Character'
     cid = Column(Integer, primary_key=True)
     name = Column(String)
 
 
-class Connect(Base):
+
+class connect(Base):
     __tablename__ = 'Connect'
-    userid = Column(Integer, ForeignKey('userid'), primary_key=True)
-    cid = Column(Integer, ForeignKey('cid'), primary_key=True)
+    userid = Column(Integer, ForeignKey('User.userid'), primary_key=True)
+    cid = Column(Integer, ForeignKey('Character.cid'), primary_key=True)
     element = Column(String)
     rarity = Column(Integer)
     level = Column(Integer)
@@ -41,9 +39,3 @@ class Connect(Base):
 
 
 Base.metadata.create_all(engine)
-
-if __name__ == "__main__":
-    main()
-
-
-
