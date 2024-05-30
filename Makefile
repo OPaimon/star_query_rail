@@ -5,10 +5,10 @@ OS := $(shell python -c "import sys; print(sys.platform)")
 
 ifeq ($(OS),win32)
 	PYTHONPATH := $(shell python -c "import os; print(os.getcwd())")
-    TEST_COMMAND := set PYTHONPATH=$(PYTHONPATH) && poetry run pytest -c pyproject.toml --cov-report=html --cov=star_query_rail tests/
+    TEST_COMMAND := set PYTHONPATH=$(PYTHONPATH) && rye run pytest -c pyproject.toml --cov-report=html --cov=star_query_rail tests/
 else
 	PYTHONPATH := `pwd`
-    TEST_COMMAND := PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=star_query_rail tests/
+    TEST_COMMAND := PYTHONPATH=$(PYTHONPATH) rye run pytest -c pyproject.toml --cov-report=html --cov=star_query_rail tests/
 endif
 
 #* Docker variables

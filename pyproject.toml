@@ -12,6 +12,7 @@ dependencies = [
     "aiohttp>=3.9.5",
     "fastapi>=0.111.0",
     "simnet @ git+https://github.com/PaiGramTeam/SIMNet",
+    "setuptools>=70.0.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.9"

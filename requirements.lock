@@ -80,6 +80,8 @@ pyyaml==6.0.1
 rich==13.7.1
     # via star-query-rail
     # via typer
+setuptools==70.0.0
+    # via star-query-rail
 shellingham==1.5.4
     # via typer
 simnet @ git+https://github.com/PaiGramTeam/SIMNet@5c02e769820f005a9b81ca954bd454b521acca4b
