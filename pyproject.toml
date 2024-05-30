@@ -14,7 +14,7 @@ dependencies = [
     "simnet @ git+https://github.com/PaiGramTeam/SIMNet",
 ]
 readme = "README.md"
-requires-python = ">= 3.8"
+requires-python = ">= 3.9"
 
 [project.scripts]
 star-query-rail = 'star_query_rail.__main__:main'
