@@ -1,57 +1,48 @@
-# Poetry pyproject.toml: https://python-poetry.org/docs/pyproject/
-[build-system]
-requires = ["poetry_core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
-name = "star_query_rail"
+[project]
+name = "star-query-rail"
 version = "0.1.0"
 description = "A tool for query some infomation about a game"
+authors = [
+    { name = "OPaimon", email = "paimoe@bupt.edu.cn" }
+]
+dependencies = [
+    "rich>=13.7.1",
+    "typer>=0.12.3",
+    "arko-wrapper>=0.2.8",
+    "aiohttp>=3.9.5",
+    "fastapi>=0.111.0",
+    "simnet @ git+https://github.com/PaiGramTeam/SIMNet",
+]
 readme = "README.md"
-authors = ["star_query_rail <paimoe@bupt.edu.cn>"]
-license = "MIT"
-repository = "https://github.com/OPaimon/star_query_rail"
-homepage = "https://github.com/OPaimon/star_query_rail"
+requires-python = ">= 3.8"
 
-# Keywords description https://python-poetry.org/docs/pyproject/#keywords
-keywords = []  #! Update me
+[project.scripts]
+star-query-rail = 'star_query_rail.__main__:main'
 
-# Pypi classifiers: https://pypi.org/classifiers/
-classifiers = [  #! Update me
-  "Development Status :: 3 - Alpha",
-  "Intended Audience :: Developers",
-  "Operating System :: OS Independent",
-  "Topic :: Software Development :: Libraries :: Python Modules",
-  "License :: OSI Approved :: MIT License",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.9",
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "ruff>=0.4.6",
+    "pytest>=8.2.1",
+    "mypy>=1.10.0",
+    "rich>=13.7.1",
+    "bandit>=1.7.8",
+    "pre-commit>=3.7.1",
+    "pytest-cov>=5.0.0",
+    "pytest-html>=4.1.1",
+    "coverage>=7.5.3",
+    "coverage-badge>=1.1.1",
 ]
 
-[tool.poetry.scripts]
-# Entry points for the package https://python-poetry.org/docs/pyproject/#scripts
-"star_query_rail" = "star_query_rail.__main__:app"
+[tool.hatch.metadata]
+allow-direct-references = true
 
-
-
-[tool.poetry.dependencies]
-python = "^3.9"
-
-typer = {extras = ["all"], version = "^0.4.0"}
-rich = "^10.14.0"
-simnet = {git = "https://github.com/PaiGramTeam/SIMNet"}
-arko-wrapper = "^0.2.8"
-
-[tool.poetry.dev-dependencies]
-pytest = "^7.4.3"
-pytest-html = "^3.1.1"
-pytest-cov = "^3.0.0"
-bandit = "^1.7.1"
-ruff = "^0.1.6"
-pre-commit = "^2.21.0"
-coverage = "^6.1.2"
-coverage-badge = "^1.1.0"
-
-
+[tool.hatch.build.targets.wheel]
+packages = ["star_query_rail"]
 
 [tool.ruff]
 # https://beta.ruff.rs/docs/settings/
@@ -65,7 +56,6 @@ lint.ignore = ["F401"]
 
 # Exclude a variety of commonly ignored directories.
 respect-gitignore = true
-lint.ignore-init-module-imports = true
 exclude = [
     ".bzr",
     ".direnv",

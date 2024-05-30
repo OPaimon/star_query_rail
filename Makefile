@@ -18,28 +18,28 @@ VERSION := latest
 .PHONY: lock install pre-commit-install polish-codestyle formatting test check-codestyle lint docker-build docker-remove cleanup help
 
 lock:
-	poetry lock -n && poetry export --without-hashes > requirements.txt
+	rye lock
 
 install:
-	poetry lock -n && poetry export --without-hashes > requirements.txt
-	poetry install -n
+	rye lock
+	rye sync
 pre-commit-install:
-	poetry run pre-commit install
+	rye run pre-commit install
 
 polish-codestyle:
-	poetry run ruff format --config pyproject.toml .
-	poetry run ruff check --fix --config pyproject.toml .
+	rye run ruff format --config pyproject.toml .
+	rye run ruff check --fix --config pyproject.toml .
 
 formatting: polish-codestyle
 format: polish-codestyle
 
 test:
 	$(TEST_COMMAND)
-	poetry run coverage-badge -o assets/images/coverage.svg -f
+	rye run coverage-badge -o assets/images/coverage.svg -f
 
 check-codestyle:
-	poetry run ruff format --check --config pyproject.toml .
-	poetry run ruff check --config pyproject.toml .
+	rye run ruff format --check --config pyproject.toml .
+	rye run ruff check --config pyproject.toml .
 
 
 

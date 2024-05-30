@@ -1,4 +1,5 @@
 """Tests for hello function."""
+
 import pytest
 
 from star_query_rail.example import hello

@@ -1,4 +1,5 @@
 """Example of code."""
+
 import asyncio
 
 from star_query_rail.utils.simnet_test import (

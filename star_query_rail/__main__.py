@@ -34,8 +34,8 @@ def version_callback(print_version: bool) -> None:
         raise typer.Exit()
 
 
-@app.command(name="")
-def main(
+@app.command(name="hello")
+def cli_hello(
     name: str = typer.Option(..., help="Person to greet."),
     color: Optional[Color] = typer.Option(
         None,
@@ -79,5 +79,8 @@ def cli_get_character_info(
     get_character_info(cookies, player_id)
 
 
-if __name__ == "__main__":
+def main():
     app()
+
+
+main()

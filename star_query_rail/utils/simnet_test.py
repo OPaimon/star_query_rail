@@ -46,7 +46,7 @@ def print_character_info(character: StarRailDetailCharacter):
 
     print("\n属性:")
     for prop in character.properties:
-        print(f"  {prop.property_type}: {prop.final}")
+        print(f"  {prop.property_type}: {prop.base} {prop.add} {prop.final}")
 
     print("\n技能:")
     for skill in character.skills:
