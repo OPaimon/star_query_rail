@@ -13,6 +13,8 @@ dependencies = [
     "fastapi>=0.111.0",
     "simnet @ git+https://github.com/PaiGramTeam/SIMNet",
     "setuptools>=70.0.0",
+    "sqlalchemy>=2.0.30",
+    "psycopg2>=2.9.9",
 ]
 readme = "README.md"
 requires-python = ">= 3.9"

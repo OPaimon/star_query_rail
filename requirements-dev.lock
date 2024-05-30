@@ -49,6 +49,8 @@ filelock==3.14.0
 frozenlist==1.4.1
     # via aiohttp
     # via aiosignal
+greenlet==3.0.3
+    # via sqlalchemy
 h11==0.14.0
     # via httpcore
     # via uvicorn
@@ -96,6 +98,8 @@ platformdirs==4.2.2
 pluggy==1.5.0
     # via pytest
 pre-commit==3.7.1
+psycopg2==2.9.9
+    # via star-query-rail
 pydantic==1.10.15
     # via fastapi
     # via simnet
@@ -131,6 +135,8 @@ simnet @ git+https://github.com/PaiGramTeam/SIMNet@5c02e769820f005a9b81ca954bd45
 sniffio==1.3.1
     # via anyio
     # via httpx
+sqlalchemy==2.0.30
+    # via star-query-rail
 starlette==0.37.2
     # via fastapi
 stevedore==5.2.0
@@ -143,6 +149,7 @@ typing-extensions==4.12.0
     # via fastapi
     # via mypy
     # via pydantic
+    # via sqlalchemy
     # via typer
 ujson==5.10.0
     # via fastapi
