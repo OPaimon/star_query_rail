@@ -1,6 +1,7 @@
 import asyncio
 from typing import Any, Dict
 
+
 from arkowrapper import ArkoWrapper
 from simnet import Region, StarRailClient
 from simnet.models.starrail.chronicle.characters import StarRailDetailCharacter
