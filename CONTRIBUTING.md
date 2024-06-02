@@ -11,8 +11,8 @@ conda create -n star_query_rail python=3.10
 conda activate star_query_rail
 ```
 
-We use `poetry` to manage the [dependencies](https://github.com/python-poetry/poetry).
-If you don't have `poetry`, you should install with `pip install poetry`.
+We use `rye` to manage the [dependencies](https://github.com/python-poetry/poetry).
+If you don't have `rye`, you should install by reading this [guide](https://rye.astral.sh/guide/installation/#installing-rye).
 
 To install dependencies and prepare [`pre-commit`](https://pre-commit.com/) hooks you would need to run `install` command:
 

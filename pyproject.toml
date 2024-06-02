@@ -15,12 +15,14 @@ dependencies = [
     "setuptools>=70.0.0",
     "sqlalchemy>=2.0.30",
     "psycopg2>=2.9.9",
+    "sqlmodel[all]>=0.0.18",
+    "alembic>=1.13.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.9"
 
 [project.scripts]
-star-query-rail = 'star_query_rail.__main__:main'
+star-query-rail = 'star_query_rail.main:main'
 
 [build-system]
 requires = ["hatchling"]
