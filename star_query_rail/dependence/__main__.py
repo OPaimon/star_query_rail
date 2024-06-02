@@ -1,42 +1,42 @@
-import sqlalchemy
-from sqlalchemy import create_engine, Column, Integer, JSON, ForeignKey, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from typing import Optional
 
-# 创建 SQLAlchemy 引擎
-engine = create_engine("postgresql://postgres:@localhost/starrail", echo=True)
-
-# 创建基类
-Base = sqlalchemy.orm.declarative_base()
+from sqlmodel import JSON, Column, Field, SQLModel, create_engine
 
 
-class user(Base):
-    __tablename__ = "User"
-    userid = Column(Integer, primary_key=True)
-    name = Column(String)
-    cookie = Column(JSON)
+class User(SQLModel, table=True):
+    userid: int = Field(primary_key=True)
+    psw: str
+    name: str
+    cookie: dict | None = Field(default=None, sa_column=Column(JSON))
 
 
-class character(Base):
-    __tablename__ = "Character"
-    cid = Column(Integer, primary_key=True)
-    name = Column(String)
+class Character(SQLModel, table=True):
+    cid: int = Field(primary_key=True)
+    name: str
 
 
-class connect(Base):
-    __tablename__ = "Connect"
-    userid = Column(Integer, ForeignKey("User.userid"), primary_key=True)
-    cid = Column(Integer, ForeignKey("Character.cid"), primary_key=True)
-    element = Column(String)
-    rarity = Column(Integer)
-    level = Column(Integer)
-    rank = Column(Integer)
-    equipment = Column(JSON, nullable=True)
-    relics = Column(JSON)
-    properties = Column(JSON)
-    skills = Column(JSON)
-    base_type = Column(String)
-    figure_path = Column(String)
+class Connect(SQLModel, table=True):
+    userid: int = Field(foreign_key="user.userid", primary_key=True)
+    cid: int = Field(foreign_key="character.cid", primary_key=True)
+    element: str
+    rarity: int
+    level: int
+    rank: int
+    equipment: dict | None = Field(default=None, sa_column=Column(JSON))
+    relics: dict | None = Field(default=None, sa_column=Column(JSON))
+    properties: dict = Field(sa_column=Column(JSON))
+    skills: dict = Field(sa_column=Column(JSON))
+    base_type: str
+    figure_path: str
 
 
-Base.metadata.create_all(engine)
+def main():
+    dbname = "starrail"
+    url = f"postgresql://postgres:@localhost/{dbname}"
+    print(url)
+    engine = create_engine(url, echo=True)
+    SQLModel.metadata.create_all(engine)
+
+
+if __name__ == "__main__":
+    main()
