@@ -1,6 +1,7 @@
 from typing import Optional
 
 from sqlmodel import JSON, Column, Field, SQLModel, create_engine
+from models import Userinfo, Email, Character, ConnectEU, ConnectUC
 
 
 def main():
