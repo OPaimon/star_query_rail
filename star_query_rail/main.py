@@ -1,4 +1,4 @@
-# type: ignore[attr-defined]
+ # type: ignore[attr-defined]
 import fastapi
 from fastapi import APIRouter
 
