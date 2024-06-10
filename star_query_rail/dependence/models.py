@@ -1,9 +1,20 @@
 from sqlmodel import JSON, Column, Field, SQLModel, create_engine
 
 
+class EmailRegister(SQLModel):
+    email: str
+    psw: str
+
+
 class Email(SQLModel, table=True):
     email: str = Field(primary_key=True)
+    is_superuser: bool = False
     psw: str
+
+
+class UserTest(SQLModel):
+    userid: int
+    cookie: str
 
 
 class Userinfo(SQLModel, table=True):
@@ -35,3 +46,8 @@ class ConnectUC(SQLModel, table=True):
     skills: dict = Field(sa_column=Column(JSON))
     base_type: str
     figure_path: str
+
+
+class Token(SQLModel):
+    access_token: str
+    token_type: str = "bearer"
