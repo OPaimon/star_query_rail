@@ -3,7 +3,10 @@ from typing import Any, Dict
 
 from arkowrapper import ArkoWrapper
 from simnet import Region, StarRailClient
-from simnet.models.starrail.chronicle.characters import StarRailDetailCharacter
+from simnet.models.starrail.chronicle.characters import (
+    StarRailDetailCharacter,
+    StarRailDetailCharacters,
+)
 
 
 def parse_cookie(text: str) -> Dict[str, Any]:
@@ -61,7 +64,9 @@ def print_character_info(character: StarRailDetailCharacter):
     print(f"模型路径: {character.figure_path}")
 
 
-async def print_character_info_by_query(cookies: Dict[str, Any], player_id: int):
+async def get_character_info_by_query(
+    cookies: Dict[str, Any], player_id: int
+) -> StarRailDetailCharacters:  # noqa: E501
     print("Test")
     async with StarRailClient(
         cookies,
@@ -103,6 +108,7 @@ async def print_character_info_by_query(cookies: Dict[str, Any], player_id: int)
         #     print(f"  - 技能进度: {skill.progress}")
         data = await client.get_starrail_characters()
         # 遍历角色列表
-        print("角色列表:")
-        for character in data.avatar_list:
-            print_character_info(character)
+        # print("角色列表:")
+        # for character in data.avatar_list:
+        #     print_character_info(character)
+    return data

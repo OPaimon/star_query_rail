@@ -12,6 +12,11 @@ class EmailRegister(SQLModel):
     psw: str
 
 
+class UserTest(SQLModel):
+    userid: int
+    cookie: str
+
+
 class EmailUpdate(SQLModel):
     psw: str
 
@@ -76,16 +81,6 @@ class ConnectUC(ConnectUCBase, Table=True):
     data: dict = Field(sa_column=Column(JSON))
 
 
-'''
-class ConnectUC(ConnectUCBase, table=True):
-    element: str
-    rarity: int
-    level: int
-    rank: int
-    equipment: dict | None = Field(default=None, sa_column=Column(JSON))
-    relics: dict | None = Field(default=None, sa_column=Column(JSON))
-    properties: dict = Field(sa_column=Column(JSON))
-    skills: dict = Field(sa_column=Column(JSON))
-    base_type: str
-    figure_path: str
-'''
+class Token(SQLModel):
+    access_token: str
+    token_type: str = "bearer"

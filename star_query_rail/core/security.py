@@ -1,6 +1,7 @@
+import secrets
 from datetime import datetime, timedelta
 from typing import Any, Union
-import secrets
+
 import jwt
 from passlib.context import CryptContext
 

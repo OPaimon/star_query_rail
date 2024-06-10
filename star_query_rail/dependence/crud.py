@@ -65,7 +65,7 @@ def create_uc(*, session: Session,ucRegister: ConnectUCRegister) -> ConnectUC:
     return db_uc
 
 
-def query_account_by_email(*,session:Session, email: str) -> Email | None:
+def query_account_by_email(*, session: Session, email: str) -> Email | None:
     statement = select(Email).where(Email.email == email)
     session_account = session.exec(statement).first()
     return session_account
@@ -131,8 +131,3 @@ def del_user(*, session: Session, userid: int):
     user = session.execute(statement)
     print(user.all())
     session.delete(user.all())
-
-
-'''
-def del_uc(*,)
-'''
