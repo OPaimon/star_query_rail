@@ -2,7 +2,7 @@ from sqlmodel import JSON, Column, Field, SQLModel
 
 
 class EmailBase(SQLModel):
-    email: str = Field(unique=True, index=True)
+    email: str = Field(unique=True, index=True, primary_key=True)
     is_active: bool = True
     is_superuser: bool = False
 
@@ -27,20 +27,26 @@ class Email(EmailBase, table=True):
 
 class Userbase(SQLModel):
     userid: int = Field(primary_key=True)
-    name: str = Field(default="xq")
+    nickname: str
+
+
+class UserCreate(SQLModel):
+    cookie: str
 
 
 class UserRegister(SQLModel):
     userid: int
-    name: str
-
-
-class UserUpdate(SQLModel):
-    cookie: str
+    nickname: str
+    cookies: dict
 
 
 class Userinfo(Userbase, table=True):
-    cookie: dict | None = Field(default=None, sa_column=Column(JSON))
+    cookies: dict | None = Field(default=None, sa_column=Column(JSON))
+
+
+class CharacterUpdate(SQLModel):
+    cid: int
+    data: dict
 
 
 class CharacterRegister(SQLModel):
@@ -51,6 +57,13 @@ class CharacterRegister(SQLModel):
 class Character(SQLModel, table=True):
     cid: int = Field(primary_key=True)
     name: str
+    data: dict | None = Field(default=None, sa_column=Column(JSON))
+
+
+class ConnectEUPublic(SQLModel):
+    email: str
+    userid: int
+    nickname: str
 
 
 class ConnectEURegister(SQLModel):
@@ -63,7 +76,7 @@ class ConnectEU(SQLModel, table=True):
     userid: int = Field(foreign_key="userinfo.userid", primary_key=True)
 
 
-class ConnectUCBase(SQLModel):
+class ConnectUC(SQLModel, Table=True):
     userid: int = Field(foreign_key="userinfo.userid", primary_key=True)
     cid: int = Field(foreign_key="character.cid", primary_key=True)
 
@@ -77,10 +90,14 @@ class ConnectUCUpdate(SQLModel):
     data: dict = Field(sa_column=Column(JSON))
 
 
-class ConnectUC(ConnectUCBase, Table=True):
-    data: dict = Field(sa_column=Column(JSON))
+class EUCPublic(ConnectEUPublic):
+    characters: list[int]
 
 
 class Token(SQLModel):
     access_token: str
     token_type: str = "bearer"
+
+
+class TokenPayload(SQLModel):
+    sub: str | None = None

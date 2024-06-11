@@ -4,11 +4,10 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
+from star_query_rail.api.dep import CurrentAccount, SessionDep
 from star_query_rail.core import security
 from star_query_rail.dependence import crud
-from star_query_rail.dependence.models import Token
-
-from ..dep import SessionDep
+from star_query_rail.dependence.models import EmailBase, Token
 
 router = APIRouter()
 
@@ -25,9 +24,17 @@ def login_access_token(
     )
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    access_token_expires = timedelta(minutes=30)
+    access_token_expires = timedelta(minutes=30 * 24 * 60)
     return Token(
         access_token=security.create_access_token(
             user.email, expires_delta=access_token_expires
         )
     )
+
+
+@router.post("/login/test-token", response_model=EmailBase)
+def test_token(current_account: CurrentAccount) -> Any:
+    """
+    Test access token
+    """
+    return current_account

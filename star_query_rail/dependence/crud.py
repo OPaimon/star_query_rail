@@ -1,28 +1,30 @@
-from typing import Any
-
 from sqlalchemy.exc import NoResultFound
-from sqlmodel import Session, select, create_engine
+from sqlmodel import Session, select
 
 from star_query_rail.core.security import get_password_hash, verify_password
 from star_query_rail.dependence.models import (
+    Character,
+    CharacterRegister,
+    CharacterUpdate,
+    ConnectEU,
+    ConnectEURegister,
+    ConnectUC,
+    ConnectUCRegister,
     Email,
     EmailRegister,
     EmailUpdate,
     Userinfo,
     UserRegister,
-    UserUpdate,
-    ConnectEU,
-    ConnectEURegister,
-    ConnectUC,
-    ConnectUCRegister,
-    Character,
-    CharacterRegister,
 )
 
 
 def create_account(*, session: Session, account_register: EmailRegister) -> Email:
     db_account = Email.model_validate(
-        account_register, update={"email": account_register.email, "psw": account_register.psw}
+        account_register,
+        update={
+            "email": account_register.email,
+            "psw": get_password_hash(account_register.psw),
+        },
     )
     session.add(db_account)
     session.commit()
@@ -30,35 +32,45 @@ def create_account(*, session: Session, account_register: EmailRegister) -> Emai
 
 
 def create_user(*, session: Session, user_create: UserRegister) -> Userinfo:
-    db_user = Userinfo.model_validate(
-        user_create, update={"userid": user_create.userid,"name":user_create.name}
-    )
+    db_user = Userinfo.model_validate(user_create)
     session.add(db_user)
     session.commit()
     return db_user
 
 
 def create_eu(*, session: Session, eu_connect: ConnectEURegister) -> ConnectEU:
-    db_connect = ConnectEU.model_validate(
-        eu_connect, update={"email": eu_connect.email, "userid": eu_connect.email}
-    )
+    db_connect = ConnectEU.model_validate(eu_connect)
     session.add(db_connect)
     session.commit()
     return db_connect
 
 
-def create_character(*, session: Session, character_create: CharacterRegister) -> Character:
-    db_character = Character.model_validate(
-        character_create,update={"cid":character_create.cid,"name":character_create.name}
-    )
+def create_character(
+    *, session: Session, character_create: CharacterRegister
+) -> Character:
+    db_character = Character.model_validate(character_create)
     session.add(db_character)
     session.commit()
     return db_character
 
 
-def create_uc(*, session: Session,ucRegister: ConnectUCRegister) -> ConnectUC:
+def update_character(
+    *, session: Session, character_update: CharacterUpdate
+) -> Character:
+    statement = select(Character).where(Character.cid == character_update.cid)
+    try:
+        character = session.exec(statement).one()
+    except NoResultFound:
+        raise ValueError("Character not found")
+    character.data = character_update.data
+    session.add(character)
+    session.commit()
+    return character
+
+
+def create_uc(*, session: Session, uc_register: ConnectUCRegister) -> ConnectUC:
     db_uc = ConnectUC.model_validate(
-        ucRegister, update={"userid": ucRegister.userid, "cid": ucRegister.cid}
+        uc_register, update={"userid": uc_register.userid, "cid": uc_register.cid}
     )
     session.add(db_uc)
     session.commit()
@@ -71,10 +83,8 @@ def query_account_by_email(*, session: Session, email: str) -> Email | None:
     return session_account
 
 
-def query_users_by_email(*,session:Session, email: str):
-    statement = (
-        select(Userinfo).join(ConnectEU).join(Email).where(Email.email == email)
-    )
+def query_users_by_email(*, session: Session, email: str):
+    statement = select(Userinfo).join(ConnectEU).join(Email).where(Email.email == email)
     result = session.exec(statement).all()
     return result
 
@@ -99,7 +109,9 @@ def authenticate(*, session: Session, email: str, password: str) -> Email | None
     return db_account
 
 
-def update_password(*, session: Session, email: str, email_update: EmailUpdate) -> Email:
+def update_password(
+    *, session: Session, email: str, email_update: EmailUpdate
+) -> Email:
     statement = select(Email).where(Email.email == email)
     try:
         email_record = session.exec(statement).one()
@@ -120,7 +132,9 @@ def del_account(*, session: Session, email: str):
 
 
 def del_eu(*, session: Session, email: str, userid: int):
-    statement = select(ConnectEU).where(ConnectEU.email == email and ConnectEU.userid == userid)
+    statement = select(ConnectEU).where(
+        ConnectEU.email == email and ConnectEU.userid == userid
+    )
     eu = session.execute(statement)
     print(eu.all())
     session.delete(eu.all())
