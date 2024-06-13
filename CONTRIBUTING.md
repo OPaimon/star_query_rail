@@ -6,11 +6,6 @@ First of all, you need to install `python3.8` or higher. We recommend create a n
 
 Create your conda environment, and then activate it:
 
-```bash
-conda create -n star_query_rail python=3.10
-conda activate star_query_rail
-```
-
 We use `rye` to manage the [dependencies](https://github.com/python-poetry/poetry).
 If you don't have `rye`, you should install by reading this [guide](https://rye.astral.sh/guide/installation/#installing-rye).
 

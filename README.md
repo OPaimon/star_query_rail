@@ -18,30 +18,24 @@ A tool for query some infomation about a game
 
 ## Quick start
 
-Conda package manager is recommended. Create a conda environment.
+We use rye to manager the Project
+For Linux User
 
 ```bash
-conda create -n star_query_rail python==3.10
+curl -sSf https://rye.astral.sh/get | bash
 ```
 
-Activate conda environment and install poetry
+Sync the project
+```bash
+rye sync
+```
+
+Then you can run the server using the following command:
 
 ```bash
-conda activate star_query_rail
-pip install poetry
+rye run uvicorn star_query_rail.main:app
 ```
 
-Then you can run the client using the following command:
-
-```bash
-star_query_rail --help
-```
-
-or with `Poetry`:
-
-```bash
-poetry run star_query_rail --help
-```
 
 ### Makefile usage
 
@@ -142,30 +136,6 @@ make check-codestyle && make test && make check-safety
 </p>
 </details>
 
-<details>
-<summary>Docker</summary>
-<p>
-
-```bash
-make docker-build
-```
-
-which is equivalent to:
-
-```bash
-make docker-build VERSION=latest
-```
-
-Remove docker image with
-
-```bash
-make docker-remove
-```
-
-More information [about docker](https://github.com/Undertone0809/python-package-template/tree/main/%7B%7B%20cookiecutter.project_name%20%7D%7D/docker).
-
-</p>
-</details>
 
 <details>
 <summary>Cleanup</summary>
