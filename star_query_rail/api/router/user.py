@@ -14,6 +14,7 @@ from star_query_rail.dependence.models import (
     ConnectEURegister,
     ConnectUCRegister,
     EUCPublic,
+    Message,
     Userbase,
     UserCreate,
     Userinfo,
@@ -24,7 +25,7 @@ from star_query_rail.utils.parse import parse_cookie
 router = APIRouter()
 
 
-@router.post("/", response_model=ConnectEUPublic)
+@router.post("/", response_model=EUCPublic)
 async def bind_user(
     session: SessionDep, current_account: CurrentAccount, user_in: UserCreate
 ) -> EUCPublic:
@@ -79,7 +80,8 @@ async def bind_user(
                 session=session,
                 character_create=CharacterRegister(cid=ele.uid, name=ele.nickname),
             )
-        characters.append(ele.uid)
+        character = CharacterRegister(cid=ele.uid, name=ele.nickname)
+        characters.append(character)
     euc = EUCPublic(
         email=eu.email, userid=eu.userid, nickname=eu.nickname, characters=characters
     )
@@ -119,3 +121,85 @@ async def get_characters_detail(
         return data
     except TimedOut:
         return characters_detail
+
+
+@router.get("/get-info", response_model=EUCPublic)
+async def get_info(session: SessionDep, current_account: CurrentAccount) -> EUCPublic:
+    """
+    Get user info
+    """
+    euc_public = EUCPublic(email=current_account.email)
+    connect_eu = session.query(ConnectEU).filter_by(email=current_account.email).first()
+    if connect_eu:
+        euc_public.userid = connect_eu.userid
+    else:
+        return euc_public
+    cookies = session.get(Userinfo, euc_public.userid).cookies
+    async with StarRailClient(
+        cookies,
+        region=Region.CHINESE,
+        device_id=cookies.get("x-rpc-device_id"),
+        device_fp=cookies.get("x-rpc-device_fp"),
+        lang="zh-cn",
+    ) as client:
+        account_id = client.account_id
+        data = await client.get_starrail_accounts()
+        user_out = data.pop()
+        nickname = user_out.nickname
+        data.append(user_out)
+    euc_public.nickname = nickname
+    characters = list()
+    for ele in data:
+        cur_character = session.get(Character, ele.uid)
+        if not cur_character:
+            crud.create_character(
+                session=session,
+                character_create=CharacterRegister(cid=ele.uid, name=ele.nickname),
+            )
+        character = CharacterRegister(cid=ele.uid, name=ele.nickname)
+        characters.append(character)
+    euc_public.characters = characters
+    return euc_public
+
+
+@router.delete("/unbind/{userid}", response_model=Message)
+def unbind_user(
+    session: SessionDep, current_account: CurrentAccount, userid: int
+) -> Message:
+    """
+    Unbind user from account
+    """
+    bind = session.get(ConnectEU, {"userid": userid, "email": current_account.email})
+    if not bind:
+        raise HTTPException(
+            status_code=400,
+            detail="The user with this email does not exist in the system.",
+        )
+    session.query(ConnectEU).filter_by(
+        userid=userid, email=current_account.email
+    ).delete()
+    session.commit()
+    return Message(message="Account unbinded")
+
+
+@router.delete("/delcharacter/{cid}", response_model=Message)
+def delete_character(
+    session: SessionDep, current_account: CurrentAccount, cid: int
+) -> Message:
+    """
+    Delete character
+    """
+    if not current_account.is_superuser:
+        raise HTTPException(
+            status_code=400,
+            detail="You do not have the permission to delete characters.",
+        )
+    character = session.get(Character, cid)
+    if not character:
+        raise HTTPException(
+            status_code=400,
+            detail="The character does not exist in the system.",
+        )
+    session.query(Character).filter_by(cid=cid).delete()
+    session.commit()
+    return Message(message="Character deleted")

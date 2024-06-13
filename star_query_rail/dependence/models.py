@@ -62,8 +62,8 @@ class Character(SQLModel, table=True):
 
 class ConnectEUPublic(SQLModel):
     email: str
-    userid: int
-    nickname: str
+    userid: int | None = None
+    nickname: str | None = None
 
 
 class ConnectEURegister(SQLModel):
@@ -91,7 +91,7 @@ class ConnectUCUpdate(SQLModel):
 
 
 class EUCPublic(ConnectEUPublic):
-    characters: list[int]
+    characters: list[CharacterRegister] | None
 
 
 class Token(SQLModel):
@@ -101,3 +101,7 @@ class Token(SQLModel):
 
 class TokenPayload(SQLModel):
     sub: str | None = None
+
+
+class Message(SQLModel):
+    message: str

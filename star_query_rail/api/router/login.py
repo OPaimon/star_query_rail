@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from star_query_rail.api.dep import CurrentAccount, SessionDep
 from star_query_rail.core import security
 from star_query_rail.dependence import crud
-from star_query_rail.dependence.models import EmailBase, Token
+from star_query_rail.dependence.models import ConnectEU, EmailBase, EUCPublic, Token
 
 router = APIRouter()
 
